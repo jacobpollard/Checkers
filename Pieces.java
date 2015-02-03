@@ -11,4 +11,11 @@ public class Pieces
 	{
 		isKing = true;
 	}
-}	
+}	public boolean isKing()
+	{
+		return isKing;
+	}
+	public boolean isCompPiece()
+	{
+		return CompPiece;
+	}
