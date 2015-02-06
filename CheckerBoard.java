@@ -1,3 +1,13 @@
+/**
+ * Program: CheckerBoard.java
+ * 
+ * .....
+ * 
+ * @author Jacob Pollard Neil Butcher
+ * 
+ * @version tbd...
+ */
+
 public class CheckerBoard
 {
     public Pieces[][] board;
@@ -44,25 +54,42 @@ public class CheckerBoard
         }
     }
 
+    public Pieces[][] getBoard()
+    {
+        return board;
+    }
+
+    public Pieces getState(int x, int y)
+    {
+        return board[x][y];
+    }
+
+    public void play()
+    {
+
+    }
+
     public void printBoard()
     {
         int i, j;
         for (i = 0; i < 8; i++)
         {
+            System.out.print("| ");
             for (j = 0; j < 8; j++)
             {
                 if (board[i][j] == null)
                 {
-                    System.out.print("0  ");
+                    System.out.print("0");
                 }
                 else if (board[i][j].isCompPiece() == true)
                 {
-                    System.out.print("C  ");
+                    System.out.print("C");
                 }
                 else
                 {
-                    System.out.print("P  ");
+                    System.out.print("P");
                 }
+                System.out.print(" | ");
             }
             System.out.print("\n");
         }
