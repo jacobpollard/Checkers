@@ -64,9 +64,35 @@ public class CheckerBoard
         return board[x][y];
     }
 
-    public void play()
+    public void makeMove(int startX, int startY, int endX, int endY)
     {
-
+       board[endX][endY] = board[startX][startY];
+    }
+    
+    public boolean hasPlayerPiece(int x, int y)
+    {
+        if(board[x][y] == null || board[x][y].isCompPiece())
+        {
+            return false;
+        }
+        if(!board[x][y].isCompPiece())
+        {
+            return true;
+        }
+        return true;
+    }
+    
+    public boolean hasCompPiece(int x, int y)
+    {
+        if(board[x][y] == null || !board[x][y].isCompPiece())
+        {
+            return false;
+        }
+        if(board[x][y].isCompPiece())
+        {
+            return true;
+        }
+        return true;
     }
 
     public void printBoard()
