@@ -28,7 +28,6 @@ public class Pieces
         }
 
     }
-
     public boolean isKing()
     {
         return (pieceState == 3 || pieceState == 4);

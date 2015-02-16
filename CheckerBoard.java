@@ -54,61 +54,81 @@ public class CheckerBoard
         }
     }
 
-    public void setBoard()
+/*
+ * This returns 1 if the space is empty 
+ * 				0 if the space has a piece in it
+ * 				and -1 if index was invalid
+ * 
+ */
+    private boolean isLegal(int x, int y)
     {
-
+    	return (x >= 0 && y >= 0 && x < 8 && y < 8);
     }
-
-    public void setPiece(int x, int y, Pieces piece)
+    public int isEmptySpace(int x, int y)
     {
-        board[x][y] = piece;
+    	if(isLegal(x, y))
+    	{
+    		if(board[x][y].isEmpty())
+    		{
+    			return 1;
+    		}
+    		else
+    		{
+    			return 0;
+    		}
+    			
+    	}
+    	else
+    	{
+    		return -1;
+    		
+    	}
     }
-
-    public Pieces getState(int x, int y)
+    public int isKing(int x, int y)
     {
-        return board[x][y];
+    	if(!isLegal(x, y))
+    	{
+    		return -1;
+    	}
+    	else if(board[x][y].isKing())
+    	{
+    		return 1;
+    	}
+    	else
+    	{
+    		return 0;
+    	}
     }
-
-    public Pieces getPiece(int x, int y)
-    {
-        return board[x][y];
-    }
-
     public void makeMove(int startX, int startY, int endX, int endY)
     {
+    	Pieces temp = board[endX][endY];
         board[endX][endY] = board[startX][startY];
+        board[startX][startY] = temp;
     }
 
-    public boolean hasPlayerPiece(int x, int y)
+    public int getPieceType(int x, int y)
     {
-        if (board[x][y].isEmpty() || board[x][y].isCompPiece())
-        {
-            return false;
-        }
-        if (!board[x][y].isCompPiece())
-        {
-            return true;
-        }
-        return true;
+    	if(!isLegal(x, y))
+    	{
+    		return -1;
+    	}
+    	else if(board[x][y].isEmpty())
+    	{
+    		return 0;
+    	}
+    	else if(board[x][y].isCompPiece())
+    	{
+    		return 1;
+    	}
+    	else
+    	{
+    		return 2;
+    	}
+    	
     }
-
-    /**
-     * 
-     * @param x
-     * @param y
-     * @return
-     */
-    public boolean hasCompPiece(int x, int y)
+    public void removePiece(int x, int y)
     {
-        if (board[x][y].isEmpty() || !board[x][y].isCompPiece())
-        {
-            return false;
-        }
-        if (board[x][y].isCompPiece())
-        {
-            return true;
-        }
-        return true;
+    	board[x][y] = new Pieces(0);
     }
 
     /**
@@ -118,67 +138,24 @@ public class CheckerBoard
      * |5|_|_|_|4| 
      * |_|1|_|0|_| 
      * |_|_|X|_|_| 
-     * |_|2|_|3|_| 
-     * |6|_|_|_|7|
-     * 
-     * @param x
-     *            x index in the board
-     * @param y
-     *            y index in the board
-     * @return array containing pieces in specific indices
-     */
-    public Pieces[] getSurrounds(int x, int y)
-    {
-        Pieces[] mine = new Pieces[8];
-
-        if (x > 7 || y > 7)
-        {
-            return null;
-        }
-        if (x != 0 && y != 7)
-        {
-            mine[0] = board[x - 1][y + 1];
-            if (x > 1 && y < 6)
-            {
-                mine[4] = board[x - 2][y + 2];
-            }
-        }
-        if (x != 0 && y != 0)
-        {
-            mine[1] = board[x - 1][y - 1];
-            if (x > 1 && y > 1)
-            {
-                mine[5] = board[x - 2][y - 2];
-            }
-        }
-        if (x != 7 && y != 0)
-        {
-            mine[2] = board[x + 1][y - 1];
-            if (x < 6 && y > 1)
-            {
-                mine[6] = board[x + 2][y - 2];
-            }
-        }
-        if (x != 7 && y != 7)
-        {
-            mine[3] = board[x + 1][y + 1];
-            if (x < 6 && y < 6)
-            {
-                mine[7] = board[x + 2][y + 2];
-            }
-        }
-        return mine;
-    }
-
+   
+   
+   
     /**
      * Prints the state of the board.
      */
     public void printBoard()
     {
+    	System.out.print(" ");
+    	for(int x = 0; x < 8; x++)
+    	{
+    		System.out.print("|"+x);
+    	}
+    	System.out.println();
         int i, j;
         for (i = 0; i < 8; i++)
         {
-            System.out.print("|");
+            System.out.print(i +"|");
             for (j = 0; j < 8; j++)
             {
                 if (board[i][j].isEmpty())
