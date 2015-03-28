@@ -1,3 +1,5 @@
+
+
 /**
  * Program: CheckerBoard.java
  * 
@@ -8,7 +10,7 @@
  * @version tbd...
  */
 
-public class CheckerBoard
+public class CheckerBoard implements ConstVals
 {
     public Pieces[][] board;
 
@@ -106,29 +108,37 @@ public class CheckerBoard
         board[startX][startY] = temp;
     }
 
-    public int getPieceType(int x, int y)
+    public PieceTypes getPieceType(int x, int y)
     {
     	if(!isLegal(x, y))
     	{
-    		return -1;
+    		return PieceTypes.INVALID;
     	}
     	else if(board[x][y].isEmpty())
     	{
-    		return 0;
+    		return PieceTypes.EMPTY_SPACE;
     	}
     	else if(board[x][y].isCompPiece())
     	{
-    		return 1;
+    		return PieceTypes.COMP_PIECE;
     	}
     	else
     	{
-    		return 2;
+    		return PieceTypes.PLAYER_PIECE;
     	}
     	
     }
     public void removePiece(int x, int y)
     {
     	board[x][y] = new Pieces(0);
+    }
+    public void addPiece(int x, int y, boolean isKinged, int status)
+    {
+    	Pieces piece = new Pieces(status);
+    	if(isKinged == true)
+    	{
+    		piece.KingMe();
+    	}
     }
 
     /**
@@ -175,5 +185,9 @@ public class CheckerBoard
             System.out.print("\n");
         }
     }
+
+	public Pieces getPiece(int i, int j) {
+		return board[i][j];
+	}
 
 }
