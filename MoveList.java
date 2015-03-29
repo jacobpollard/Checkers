@@ -21,5 +21,26 @@ ArrayList<Move> moves;
 	{
 		moves.add(new Move(x, y));
 	}
+	public void add(Move move) {
+		// TODO Auto-generated method stub
+		moves.add(move);
+	}
+	public String toString()
+	{
+		String str = "";
+		for(Move m: moves)
+		{
+			str += m.toString()+"-";
+		}
+		return str;
+	}
+	public Move get(int x) {
+		// TODO Auto-generated method stub
+		return moves.get(x);
+	}
+	public int size() {
+		// TODO Auto-generated method stub
+		return moves.size();
+	}
 
 }

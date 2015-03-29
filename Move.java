@@ -30,4 +30,16 @@ public Move(int startX, int startY)
 
 		
 }
+public String toString()
+{
+	return "(" + startX + ", " + startY + ")";
+}
+public int getX() {
+	// TODO Auto-generated method stub
+	return startX;
+}
+public int getY()
+{
+	return startY;
+}
 }

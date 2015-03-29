@@ -128,9 +128,11 @@ public class CheckerBoard implements ConstVals
     	}
     	
     }
-    public void removePiece(int x, int y)
+    public Pieces removePiece(int x, int y)
     {
+    	Pieces retVal = board[x][y];
     	board[x][y] = new Pieces(0);
+    	return retVal;
     }
     public void addPiece(int x, int y, boolean isKinged, int status)
     {
@@ -188,6 +190,11 @@ public class CheckerBoard implements ConstVals
 
 	public Pieces getPiece(int i, int j) {
 		return board[i][j];
+	}
+
+	public void addPiece(Pieces oldPiece, int i, int j) {
+		// TODO Auto-generated method stub
+		board[i][j]=oldPiece;
 	}
 
 }
