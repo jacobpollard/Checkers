@@ -25,15 +25,12 @@ public class Game implements ConstVals
     public void play()
     {
     	Scanner input = new Scanner(System.in);
-    	int startX;
-    	int startY;
-    	int endX;
-    	int endY;
     	while(gameNotOver())
     	{
     		board.printBoard();
     		getMoves();
     		displayMoves();
+    		board.printBoard();
     		System.out.println("please choose a move");
     		int index = input.nextInt();
     		while (!makeMove(index))
@@ -46,9 +43,11 @@ public class Game implements ConstVals
     		playerTurn = !playerTurn;
     		//makeMove(startX, startY, endX, endY);
     	}
+    	input.close();
     }
     private boolean makeMove(int index) {
-		if(index < 0 || index >= allMoves.size())
+		
+    	if(index < 0 || index >= allMoves.size())
 		{
 			return false;
 		}
@@ -56,28 +55,47 @@ public class Game implements ConstVals
 		{
 			MoveList move = allMoves.get(index);
 			Move lastMove = move.get(0);
-			Move currentMove;
+			
 			for(int x = 1; x < move.size(); x++)
 			{
-				currentMove = move.get(x);
+				Move currentMove = move.get(x);
 				int avgX = (currentMove.getX() + lastMove.getX())/2;
-				if(avgX == lastMove.getX() || avgX ==currentMove.getX())
+				if(avgX == lastMove.getX() || avgX ==currentMove.getX())// if move was simple
 				{
 					board.makeMove(lastMove.getX(), lastMove.getY(), 
 							currentMove.getX(), currentMove.getY());
 				}
-				else
+				else // if move is a jump
 				{
 					board.makeMove(lastMove.getX(), lastMove.getY(), 
 							currentMove.getX(), currentMove.getY());
 					int avgY = (currentMove.getY() + lastMove.getY())/2;
-					board.removePiece(avgX, avgY);
-					
+					board.removePiece(avgX, avgY);					
 				}
 				lastMove = currentMove;
 			}
+			checkToKingPiece(lastMove);
 			return true;
 		}
+	}
+	private void checkToKingPiece(Move currentMove) {
+		int x = currentMove.getX();
+		int y = currentMove.getY();
+		if(playerTurn)
+		{
+			if(x == 0 && board.getPieceType(x, y) == PieceTypes.PLAYER_PIECE)
+			{
+				board.kingPiece(x, y);
+			}
+		}
+		else
+		{
+			if(x == 7 && board.getPieceType(x, y) == PieceTypes.COMP_PIECE)
+			{
+				board.kingPiece(x, y);
+			}
+		}
+		
 	}
 	private void displayMoves() {
 		// TODO Auto-generated method stub
@@ -106,7 +124,7 @@ public class Game implements ConstVals
     	{
     		for(int col = start; col < 8; col+=2)
     		{
-    			addBasicMove(row, col );
+    			addBasicMove(col, row );
     		}
     		start++;
     		start = start % 2;
@@ -215,7 +233,7 @@ private void addBasicMove(int row, int col)
     	{
     		for(int col = start; col < 8; col+=2)
     		{
-    			allJumpsAtIndex(col, row);
+    			allJumpsAtIndex(row, col);
     		}
     		start++;
     		start = start % 2;
@@ -227,14 +245,24 @@ private void addBasicMove(int row, int col)
 	 * 
 	 * 
 	 */
+	private boolean isLegal(int x, int y)
+    {
+    	return (x >= 0 && y >= 0 && x < 8 && y < 8);
+    }
 	private boolean isLegalJump(int startX, int startY, int endX, int endY) {
-    	if(board.getPieceType(endY, endX) != PieceTypes.EMPTY_SPACE)
+		if(!isLegal(startX, startY) && !isLegal(endX, endY)) // if these indices are invalid return 0
+		{
+			return false;
+		}
+		if(startX == 2 && startY == 3 && endX == 4 && endY == 1)
+			System.out.println("start x " +startX +" "+startY+" "+endX+" "+endY);
+		if(board.getPieceType(endX, endY) != PieceTypes.EMPTY_SPACE)
     	{
     		return false;
     	}
     	if(playerTurn && board.getPieceType(startX, startY) == PieceTypes.PLAYER_PIECE )
     	{
-    		if(endY - startY > 0) // if move is downward, is the piece kinged? 
+    		if(endX > startX) // if move is downward, is the piece kinged? 
     		{
     			if(board.isKing(startX, startY) == 0)
     			{
@@ -248,7 +276,7 @@ private void addBasicMove(int row, int col)
     	}   	
     	else if(!playerTurn && board.getPieceType(startX, startY) == PieceTypes.COMP_PIECE )
     	{
-    		if(endY - startY < 0) // if move is upward, is the piece kinged? 
+    		if(endX < startX) // if move is upward, is the piece kinged? 
     		{
     			if(board.isKing(startY, startX) == 0)
     			{
@@ -267,8 +295,8 @@ private void addBasicMove(int row, int col)
     // forward is moving non king piece for a computer
     private boolean canJumpUpRight(int startX, int startY)
     {
-    	int endX = startX + 2; 
-    	int endY = startY - 2;
+    	int endX = startX - 2; 
+    	int endY = startY + 2;
     	if(isLegalJump(startX, startY, endX, endY))
     	{
     		return true;
@@ -307,14 +335,10 @@ private void addBasicMove(int row, int col)
     		return false;
     	}
     }
-    private boolean canJumpDownLeft(int startY, int startX)
+    private boolean canJumpDownLeft(int startX, int startY)
     {
-    	if(startY == 2 && startX == 3)
-    	{
-    		System.out.println("here");
-    	}
-    	int endX = startX - 2; 
-    	int endY = startY + 2;
+    	int endX = startX + 2; 
+    	int endY = startY - 2;
     	if(isLegalJump(startX, startY, endX, endY))
     	{
     		return true;
@@ -382,8 +406,8 @@ private void addBasicMove(int row, int col)
 			{
 				if(!canJumpUpLeft  (startX + xOff, startY + yOff) 
 				&& !canJumpUpRight (startX + xOff, startY + yOff) 
-				&& canJumpDownLeft (startX + xOff, startY + yOff)
-				&& canJumpDownRight(startX + xOff, startY + yOff))
+				&& !canJumpDownLeft (startX + xOff, startY + yOff)
+				&& !canJumpDownRight(startX + xOff, startY + yOff))
 				{ // if we can't keep jumping then we are done
 					allMoves.add(moves);
 				}
@@ -398,8 +422,8 @@ private void addBasicMove(int row, int col)
 	}
 	private void jumpUpRight(int startX, int startY, MoveList moves) {
 		Pieces oldPiece;
-		int xOff =  2;
-		int yOff = -2;
+		int xOff = -2;
+		int yOff =  2;
 		if(canJumpUpRight(startX, startY))
 		{
 			if(moves == null)
@@ -429,8 +453,10 @@ private void addBasicMove(int row, int col)
 			}
 			else if(board.isKing(startX,  startY) == 1)
 			{
-				if(!canJumpUpLeft(startX + xOff, startY + yOff) && !canJumpUpRight(startX + xOff, startY + yOff) 
-						&& canJumpDownLeft(startX + xOff, startY + yOff) && canJumpDownRight(startX + xOff, startY + yOff))
+				if(!canJumpUpLeft(startX + xOff, startY + yOff)   && 
+				   !canJumpUpRight(startX + xOff, startY + yOff)  && 
+				   !canJumpDownLeft(startX + xOff, startY + yOff) && 
+				   !canJumpDownRight(startX + xOff, startY + yOff))
 				{ // if we can't keep jumping then we are done
 					allMoves.add(moves);
 				}
@@ -445,10 +471,11 @@ private void addBasicMove(int row, int col)
 	}
 	private void jumpDownLeft(int startX, int startY, MoveList moves) {
 		Pieces oldPiece;
-		int xOff = -2;
-		int yOff =  2;
+		int xOff =  2;
+		int yOff = -2;
 		if(canJumpDownLeft(startX, startY))
 		{
+			System.out.println("got in hereeee " +startX +", "+ startY);
 			if(moves == null)
 			{
 				moves = new MoveList();
@@ -464,20 +491,23 @@ private void addBasicMove(int row, int col)
 			oldPiece = board.removePiece(startX+(xOff/2), startY+(yOff/2));
 			if(board.isKing(startX,  startY) == 0)
 			{
-				if(!canJumpDownLeft(startX+xOff, startY+yOff) && !canJumpDownRight(startX+xOff, startY+yOff))
+				if(!canJumpDownLeft(startX+xOff, startY+yOff) && 
+				   !canJumpDownRight(startX+xOff, startY+yOff))
 				{ // if we can't keep jumping then we are done
 					allMoves.add(moves);
 				}
 				else
-				{
+				{ // if we can keep jumping, then we keep jumping
 					jumpDownLeft (startX + xOff, startY+yOff, moves);
 					jumpDownRight(startX + xOff, startY+yOff, moves);
 				}
 			}
 			else if(board.isKing(startX,  startY) == 1)
 			{
-				if(!canJumpUpLeft(startX + xOff, startY + yOff) && !canJumpUpRight(startX + xOff, startY + yOff) 
-						&& !canJumpDownLeft(startX + xOff, startY + yOff) && !canJumpDownRight(startX + xOff, startY + yOff))
+				if(!canJumpUpLeft(startX + xOff, startY + yOff)   && 
+				   !canJumpUpRight(startX + xOff, startY + yOff)  && 
+				   !canJumpDownLeft(startX + xOff, startY + yOff) && 
+				   !canJumpDownRight(startX + xOff, startY + yOff))
 				{ // if we can't keep jumping then we are done
 					allMoves.add(moves);
 				}
@@ -492,10 +522,8 @@ private void addBasicMove(int row, int col)
 			board.makeMove(startX+xOff, startY+yOff, startX, startY);
 			board.addPiece(oldPiece, startX+(xOff/2), startY+(yOff/2));
 		}
-		if(startX == 2 && startY == 3)
-		{
-			System.out.println("didn't get in if");
-		}
+		else if(startY == 2 && startX == 3)
+			System.out.println("cant jump down left");
 	}
 	private void jumpDownRight(int startX, int startY, MoveList moves) {
 		Pieces oldPiece;

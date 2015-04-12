@@ -14,11 +14,6 @@ public class CheckerBoard implements ConstVals
 {
     public Pieces[][] board;
 
-    public static void main(String args[])
-    {
-        CheckerBoard king = new CheckerBoard();
-        king.printBoard();
-    }
 
     public CheckerBoard()
     {
@@ -66,7 +61,7 @@ public class CheckerBoard implements ConstVals
     {
     	return (x >= 0 && y >= 0 && x < 8 && y < 8);
     }
-    public int isEmptySpace(int x, int y)
+    public int isEmptySpace(int y, int x)
     {
     	if(isLegal(x, y))
     	{
@@ -170,17 +165,32 @@ public class CheckerBoard implements ConstVals
             System.out.print(i +"|");
             for (j = 0; j < 8; j++)
             {
+
                 if (board[i][j].isEmpty())
                 {
                     System.out.print("_");
                 }
                 else if (board[i][j].isCompPiece() == true)
                 {
-                    System.out.print("C");
+                	if(isKing(i, j) == 1)
+                	{
+                		System.out.print("C");
+                	}
+                	else
+                	{
+                		System.out.print("c");
+                	}
                 }
                 else
                 {
-                    System.out.print("P");
+                	if(isKing(i, j) == 1)
+                	{
+                		System.out.print("P");
+                	}
+                	else
+                	{
+                		System.out.print("p");
+                	}
                 }
                 System.out.print("|");
             }
@@ -195,6 +205,11 @@ public class CheckerBoard implements ConstVals
 	public void addPiece(Pieces oldPiece, int i, int j) {
 		// TODO Auto-generated method stub
 		board[i][j]=oldPiece;
+	}
+
+	public void kingPiece(int x, int y) {
+		board[x][y].KingMe();
+		
 	}
 
 }
