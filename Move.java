@@ -6,22 +6,7 @@ int startY;
 
 static int convertTo1D(int x, int y)
 {
-	int count = 0;
-	int start = 1;
-	for(int row = 0; row < 8; row++)
-	{
-		for(int col = start; col < 8; col+=2)
-		{
-			if(row == x && col == y)
-			{
-				return count;
-			}
-			count++;
-		}
-		start++;
-		start = start % 2;
-	}
-	return -1;
+	return 4*x + y - (y/2 + y % 2);
 }
 public Move(int startX, int startY)
 {
@@ -41,5 +26,10 @@ public int getX() {
 public int getY()
 {
 	return startY;
+}
+public static int convertTo1D(Move move) {
+	int x = move.getX();
+	int y = move.getY();
+	return 4*x + y - (y/2 + y % 2);
 }
 }

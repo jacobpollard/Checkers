@@ -8,4 +8,9 @@ public interface ConstVals {
 		INVALID
 		
 	}
+	public final int EMPTY = 4;
+	public final int PLAYER = 1;
+	public final int PLAYER_KING = 3;
+	public final int CPU = 0;
+	public final int CPU_KING = 2;
 }

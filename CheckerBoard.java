@@ -13,10 +13,13 @@
 public class CheckerBoard implements ConstVals
 {
     public Pieces[][] board;
-
+    int playerCount;
+    int cpuCount;
 
     public CheckerBoard()
     {
+    	playerCount = 12;
+    	cpuCount = 12;
         int i, j;
         board = new Pieces[8][8];
 
@@ -127,11 +130,27 @@ public class CheckerBoard implements ConstVals
     {
     	Pieces retVal = board[x][y];
     	board[x][y] = new Pieces(0);
+    	if(retVal.isCompPiece())
+    	{
+    		cpuCount--;
+    	}
+    	else
+    	{
+    		playerCount--;
+    	}
     	return retVal;
     }
     public void addPiece(int x, int y, boolean isKinged, int status)
     {
     	Pieces piece = new Pieces(status);
+    	if(piece.isCompPiece())
+    	{
+    		cpuCount++;
+    	}
+    	else
+    	{
+    		playerCount++;
+    	}
     	if(isKinged == true)
     	{
     		piece.KingMe();

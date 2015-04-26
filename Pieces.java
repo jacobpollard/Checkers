@@ -1,4 +1,4 @@
-public class Pieces
+public class Pieces implements ConstVals
 {
     int pieceState; // 0 is empty space, 1 is player piece, 2 is computer piece,
                     // 3 is king player piece, 4 is king computer piece
@@ -10,13 +10,13 @@ public class Pieces
 
     public void KingMe()
     {
-        if (pieceState == 1)
+        if (pieceState == PLAYER)
         {
-            pieceState = 3;
+            pieceState = PLAYER_KING;
         }
-        else if (pieceState == 2)
+        else if (pieceState == CPU)
         {
-            pieceState = 4;
+            pieceState = CPU_KING;
         }
         else if (pieceState == 0)
         {
@@ -30,17 +30,22 @@ public class Pieces
     }
     public boolean isKing()
     {
-        return (pieceState == 3 || pieceState == 4);
+        return (pieceState == CPU_KING || pieceState == PLAYER_KING);
     }
 
     public boolean isCompPiece()
     {
-        return (pieceState == 4 || pieceState == 2);
+        return (pieceState == CPU_KING || pieceState == CPU);
     }
 
     public boolean isEmpty()
     {
-        return pieceState == 0;
+        return pieceState == EMPTY;
     }
+
+	public int getState() {
+		// TODO Auto-generated method stub
+		return pieceState;
+	}
 
 }
