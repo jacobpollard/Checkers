@@ -40,7 +40,7 @@ public class Game implements ConstVals
     		}
     		else
     		{
-    			index = cpu.getMove(allMoves);
+    			index = cpu.getMove();
     		}
 			while (!makeMove(index))
     		{
@@ -92,15 +92,17 @@ public class Game implements ConstVals
 		int y = currentMove.getY();
 		if(playerTurn)
 		{
-			if(x == 0 && board.getPieceType(x, y) == PieceTypes.PLAYER_PIECE)
+			if(x == 0 && board.getPieceType(x, y) == PieceTypes.PLAYER_PIECE && board.isKing(x,  y) == 0)
 			{
+				currentMove.isKing();
 				board.kingPiece(x, y);
 			}
 		}
 		else
 		{
-			if(x == 7 && board.getPieceType(x, y) == PieceTypes.COMP_PIECE)
+			if(x == 7 && board.getPieceType(x, y) == PieceTypes.COMP_PIECE && board.isKing(x,  y) == 0)
 			{
+				currentMove.makesKing();
 				board.kingPiece(x, y);
 			}
 		}
@@ -584,6 +586,10 @@ private void addBasicMove(int row, int col)
 	public void setTurn(boolean turn) {
 		// TODO Auto-generated method stub
 		this.playerTurn = turn;
+	}
+	public boolean getTurn() {
+		// TODO Auto-generated method stub
+		return playerTurn;
 	}
 
 }

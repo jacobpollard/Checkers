@@ -12,5 +12,7 @@ public interface ConstVals {
 	public final int PLAYER = 1;
 	public final int PLAYER_KING = 3;
 	public final int CPU = 0;
-	public final int CPU_KING = 2;
+	public final int DROP_PIECE = 32;
+	public final int KING_PIECE = 33;
+	int CPU_KING = 2;
 }

@@ -36,7 +36,20 @@ public BetterBoard(BetterBoard newBoard)
 	cpuSize = newBoard.cpuSize;
 	playerSize = newBoard.playerSize;
 }
-
+public boolean equals(BetterBoard newBoard)
+{
+	for(int x = 0; x < board.length; x++)
+	{
+		if(board[x] != newBoard.board[x])
+		{
+			return false;
+		}
+	}
+	return true;
+}
+public BetterBoard(int[] arr) {
+	this.board = arr;
+}
 private void setComputerKings(int i) {
 		if(i <= 12)
 		{

@@ -4,10 +4,9 @@ import java.util.ArrayList;
 
 
 public class MoveList {
-final public int REMOVE_PIECE = 64;
-final public int FLIP_PIECE = 65;
-final public int CLOSE_CLAW = 66;
-final public int OPEN_CLAW = 67;
+final public int REMOVE_PIECE = 32;
+final public int KING_PIECE = 33;
+
 ArrayList<Move> moves;
 	public MoveList(Move move)
 	{
@@ -49,7 +48,6 @@ ArrayList<Move> moves;
 		return (Math.abs(moves.get(0).getX() - moves.get(1).getX()) != 1);
 	}
 	public int size() {
-		// TODO Auto-generated method stub
 		return moves.size();
 	}
 	public String convertToSendableMoveList()
@@ -59,41 +57,35 @@ ArrayList<Move> moves;
 		{
 			for(int i = 0; i < moves.size(); i++)
 			{
-				str += Move.convertTo1D(moves.get(i)) * 2 + " " 
-					+  Move.convertTo1D(moves.get(i)) * 2 + 1 +" "
-					+  CLOSE_CLAW +" "
-					+  Move.convertTo1D(moves.get(i)) * 2;// Picks the piece up
-				
-				
-				str += Move.convertTo1D(moves.get(i+1)) * 2 + " "
-					+  Move.convertTo1D(moves.get(i+1)) * 2 + 1 +" "
-					+  OPEN_CLAW +" "
-					+  Move.convertTo1D(moves.get(i+1)); // puts the piece down
-				
-				
+				str += Move.convertTo1DOther(moves.get(i)) + ",";
+				str += Move.convertTo1DOther(moves.get(i+1))+",";
 				int removeX = (moves.get(i).getX() + moves.get(i+1).getX())/2;
 				int removeY = (moves.get(i).getY() + moves.get(i+1).getY())/2;
-				int coord = Move.convertTo1D(removeX, removeY);
+				int coord = Move.convertTo1DOther(removeX, removeY);
 				
-				str += coord * 2 + " " 
-					+  coord * 2 + 1 + " "
-					+  REMOVE_PIECE + " "
-					+  OPEN_CLAW;
-				
+				str += coord
+					+  REMOVE_PIECE;
+				if(i+1 < moves.size())
+				{
+					str += ",";
+				}
+			}
+			if(moves.get(moves.size()-1).isKing()) // if the last move made a piece a king then king the piece
+			{
+				str += Move.convertTo1DOther(moves.get(moves.size()-1)) + ",";
+				str += KING_PIECE;
 			}
 		}
-		else
+		else // if the move is just a regular move
 		{
-			str += Move.convertTo1D(moves.get(0)) * 2 + " " 
-					+  Move.convertTo1D(moves.get(0)) * 2 + 1 +" "
-					+  CLOSE_CLAW +" "
-					+  Move.convertTo1D(moves.get(0)) * 2;// Picks the piece up
+			str += Move.convertTo1DOther(moves.get(0)) +","
+				+  Move.convertTo1DOther(moves.get(1));// Move piece to the next location
+			if(moves.get(1).isKing()) // king the piece if appropriate
+			{
+				str += Move.convertTo1DOther(moves.get(1)) +"," + KING_PIECE;
+			}
 			
 			
-			str += Move.convertTo1D(moves.get(1)) * 2 + " "
-					+  Move.convertTo1D(moves.get(1)) * 2 + 1 +" "
-					+  OPEN_CLAW +" "
-					+  Move.convertTo1D(moves.get(1)); // puts the piece down
 		}
 		
 		return str;

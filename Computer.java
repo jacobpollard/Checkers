@@ -6,7 +6,7 @@ public class Computer {
 	public Computer()
 	{
 		Game game = Game.getInstance();
-		tree = new Node(game.getBoard(), 4, true);
+		//tree = new Node(game.getBoard(), 4, true);
 	}
 	public int minimax(Node n, int depth, boolean player)
 	{
@@ -58,11 +58,12 @@ public class Computer {
 			return val;
 		}
 	}
-	public int getMove(ArrayList<MoveList> allMoves) 
+	public int getMove() 
 	{
 		int best = -1;
 		int bestVal = -999;
 		Game game = Game.getInstance();
+		//ArrayList<MoveList> allMoves = game.getAllMoves();
 		tree = new Node(game.getBoard(), 6, false);
 		ArrayList<Node> moveVals = tree.getNextNodes();
 		for(int i = 0; i < moveVals.size(); i++)
@@ -77,5 +78,12 @@ public class Computer {
 		}
 		System.out.println("chose move "+best);
 		return best;
+	}
+	public MoveList getMoveAsMoveList() {
+		int x = getMove();
+		Game game = Game.getInstance();
+		ArrayList<MoveList> moves = game.getAllMoves();
+		return moves.get(x);
+		
 	}
 }
